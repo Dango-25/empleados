@@ -18,7 +18,7 @@ db_conn = connections.Connection(
 
 )
 output = {}
-table = 'employee'
+table = 'empleado'
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -28,7 +28,7 @@ def home():
 
 @app.route("/about", methods=['POST'])
 def about():
-    return render_template('www.intellipaat.com')
+    return render_template('')
 
 
 @app.route("/addemp", methods=['POST'])
@@ -40,11 +40,11 @@ def AddEmp():
     location = request.form['location']
     emp_image_file = request.files['emp_image_file']
 
-    insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s)"
+    insert_sql = "INSERT INTO empleado VALUES (%s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
     if emp_image_file.filename == "":
-        return "Please select a file"
+        return "Seleccione un archivo"
 
     try:
 
@@ -56,7 +56,7 @@ def AddEmp():
         s3 = boto3.resource('s3')
 
         try:
-            print("Data inserted in MySQL RDS... uploading image to S3...")
+            print("Insertando Datos en MySql RDS... Montando Imagen a S3...")
             s3.Bucket(custombucket).put_object(Key=emp_image_file_name_in_s3, Body=emp_image_file)
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
@@ -77,7 +77,7 @@ def AddEmp():
     finally:
         cursor.close()
 
-    print("all modification done...")
+    print("Modificaciones Correctas...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
 
